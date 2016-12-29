@@ -124,7 +124,7 @@ class BPNetwork:
     # Calculate derivative of j theta
     def get_list_of_derivative_of_j_theta(self):
         for i in range(0, len(self.list_of_derivative_of_j_theta)):
-            self.list_of_derivative_of_j_theta[i] = self.list_of_para_matrix[i] * self.regularization_factor * (-1.0)
+            self.list_of_derivative_of_j_theta[i] = self.list_of_para_matrix[i] * self.regularization_factor
 
         for m in range(0, len(self.x_train)):
             x_sample = np.matrix(self.x_train[m]).T
@@ -134,7 +134,7 @@ class BPNetwork:
             hypothesis = self.h(x_sample, self.list_of_para_matrix)
 
             # Backward Process
-            delta = y_sample - hypothesis
+            delta = hypothesis - y_sample
             for n in range(0, self.hidden_layer_number + 1):
                 layer_number = self.hidden_layer_number - n
                 self.list_of_derivative_of_j_theta[layer_number] += (np.dot(delta, self.a_with_bias[layer_number].T))
@@ -144,7 +144,7 @@ class BPNetwork:
                 delta = self.remove_bias_element(np.matrix(tmp_delta))
 
         for n in range(0, self.hidden_layer_number + 1):
-            self.list_of_derivative_of_j_theta[n] /= (-1.0*float(len(self.x_train)))
+            self.list_of_derivative_of_j_theta[n] /= float(len(self.x_train))
 
     # Back Propagation Process
     def bp_learning(self):
